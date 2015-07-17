@@ -8,8 +8,6 @@
 return array(
     'modules' => array(
         'Application',
-        'CountryReferential\\Api',
-        'CountryReferential\\Admin',
     ),
     'module_listener_options' => array(
         'module_paths' => array(

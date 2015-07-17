@@ -8,9 +8,7 @@
 return array(
     'modules' => array(
         'Application',
-        'CountryReferential\\Api',
-        'CountryReferential\\Admin',
-        'CountryReferential\App',
+        'CountryReferential',
     ),
     'module_listener_options' => array(
         'module_paths' => array(

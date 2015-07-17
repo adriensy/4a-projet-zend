@@ -1,5 +1,5 @@
 <?php
-namespace CountryReferential\Api;
+namespace CountryReferential;
 
 class Module
 {
