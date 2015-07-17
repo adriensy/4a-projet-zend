@@ -28,8 +28,6 @@ class ApiController extends AbstractRestfulController
                     $querySql .= $columnBdd.',';
                 }
                 $querySql = substr($querySql, 0, strlen($querySql)-1).' ';
-                
-                // Rechercher partiellement
             }
             
             $querySql .= "FROM pays WHERE code = \"".$code."\" OR alpha2 = \"".$code."\" OR alpha3 = \"".$code."\";";
