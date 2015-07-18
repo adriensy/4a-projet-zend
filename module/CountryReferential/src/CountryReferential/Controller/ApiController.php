@@ -50,6 +50,15 @@ class ApiController extends AbstractRestfulController
         
         return $view;
     }
-
+    
+    /**
+     * Supprime un ^pays en BDD
+     * 
+     * @param type $code
+     */
+    public function deleteAction($code)
+    {
+        
+    }
 }
 
