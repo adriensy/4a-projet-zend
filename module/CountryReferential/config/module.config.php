@@ -46,6 +46,19 @@ return array(
         ),
         'factories' => array(
             'translator' => 'Zend\Mvc\Service\TranslatorServiceFactory',
+            'pays-table' => function($sm) {
+                $tableGateway = $sm->get('pays-table-gateway');
+                $table = new \CountryReferential\Model\PaysTable($tableGateway);
+                
+                return $table;
+            },
+            'pays-table-gateway' => function ($sm) {
+                $dbAdapter = $sm->get('Zend\db\Adapter\Adapter');
+                $resultSetPrototype = new \Zend\Db\ResultSet\ResultSet();
+                $resultSetPrototype->setArrayObjectPrototype(new \CountryReferential\Model\Pays());
+                
+                return new \Zend\Db\TableGateway\TableGateway('pays', $dbAdapter, null, $resultSetPrototype);
+            },
         ),
     ),
     'translator' => array(
@@ -80,6 +93,9 @@ return array(
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',
+        ),
+        'strategies' => array(
+            'ViewJsonStrategy',
         ),
     ),
     // Placeholder for console routes

@@ -4,6 +4,7 @@ namespace CountryReferential\Controller;
 
 use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\View\Model\ViewModel;
+use CountryReferential\Model\Pays;
 
 class ApiController extends AbstractRestfulController
 {
@@ -13,42 +14,26 @@ class ApiController extends AbstractRestfulController
         return new ViewModel();
     }
     
+    /**
+     * Méthode GET de l'API
+     * @return \Zend\View\Model\JsonModel
+     */
     public function getAction()
     {
         $code = $this->params('code');
+        $fieldsString = $this->params()->fromQuery('fields');
         
-        if ($code) {
-            $fieldsString = $this->params()->fromQuery('fields');
-            $querySql = "SELECT ";
-            
-            if ($fieldsString) {
-                $fieldsArray = explode(",", $fieldsString);
-                
-                foreach($fieldsArray as $columnBdd) {
-                    $querySql .= $columnBdd.',';
-                }
-                $querySql = substr($querySql, 0, strlen($querySql)-1).' ';
-            }
-            
-            $querySql .= "FROM pays WHERE code = \"".$code."\" OR alpha2 = \"".$code."\" OR alpha3 = \"".$code."\";";
-            die($querySql);
-            // Executer la requête
-        }
-        
-        die();
-        
-        $json = new \Zend\View\Model\JsonModel(array(
+        $paysTable = $this->getServiceLocator()->get('pays-table');
+        $jsonView = new \Zend\View\Model\JsonModel(array(
             'success'=>true,
         ));
         
-        $data = [];
+        $paysList = $paysTable->getPays($code, $fieldsString);
         
-        $data['test'] = "ee";
-        
-        $json->setVariable('data', $data);
+        $jsonView->setVariable('data', $paysList);
         
         if (true) {
-            return $json;
+            return $jsonView;
         } else {
             return $view;
         }
