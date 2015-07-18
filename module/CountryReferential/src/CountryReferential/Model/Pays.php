@@ -105,6 +105,11 @@ class Pays
         $this->tauxTva = (isset($data['taux_tva'])) ? $data['taux_tva'] : null;
     }
     
+    /**
+     * Renvoie l'objet sous forme de tableau
+     * 
+     * @return type
+     */
     public function toArray()
     {
         $array = [];

@@ -4,11 +4,16 @@ namespace CountryReferential\Controller;
 
 use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\View\Model\ViewModel;
-use CountryReferential\Model\Pays;
+use Zend\View\Model\JsonModel;
 
 class ApiController extends AbstractRestfulController
 {
-
+    protected $acceptCriteria = array(
+      'Zend\View\Model\ViewModel' => array(
+         'application/xml',
+      ),
+   );
+    
     public function indexAction()
     {
         return new ViewModel();
@@ -20,23 +25,30 @@ class ApiController extends AbstractRestfulController
      */
     public function getAction()
     {
+        $view = $this->acceptableViewModelSelector($this->acceptCriteria, false);
+        
+        if (!$view) {
+            $view = new JsonModel();
+        }
+        
         $code = $this->params('code');
         $fieldsString = $this->params()->fromQuery('fields');
         
         $paysTable = $this->getServiceLocator()->get('pays-table');
-        $jsonView = new \Zend\View\Model\JsonModel(array(
-            'success'=>true,
-        ));
         
-        $paysList = $paysTable->getPays($code, $fieldsString);
-        
-        $jsonView->setVariable('data', $paysList);
-        
-        if (true) {
-            return $jsonView;
+        if (get_class($view) == 'Zend\View\Model\ViewModel') {
+            $view->setTerminal(true);
+            
+            $this->response->getHeaders()->addHeaderLine('Content-Type', 'text/xml; charset=utf-8');
+            
+            $paysList = $paysTable->getPaysXml($code, $fieldsString);
         } else {
-            return $view;
+            $paysList = $paysTable->getPays($code, $fieldsString);
         }
+        
+        $view->setVariable('country', $paysList);
+        
+        return $view;
     }
 
 }
