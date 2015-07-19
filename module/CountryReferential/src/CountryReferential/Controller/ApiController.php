@@ -27,9 +27,44 @@ class ApiController extends AbstractRestfulController
             $view->setTemplate("/country-referential/api/get.phtml");
             
             return $view;
+        } else if ($this->getRequest()->getMethod() == "POST") {
+            $json = $this->getRequest()->getContent();
+            $data = json_decode($json, true);
+            
+            $this->save($data);
+        } else if ($this->getRequest()->getMethod() == "PATCH") {
+            $code = $this->params('code');
+            
+            $paysTable = $this->getServiceLocator()->get('pays-table');
+            $pays = $paysTable->getPays($code, "", true)[0];
+            
+            $dataPays = $pays->toArray();
+            
+            $json = $this->getRequest()->getContent();
+            $data = array_merge($dataPays, json_decode($json, true));
+            
+            if (empty($data['code'])) {
+                return false;
+            }
+            
+            $this->save($data, true);
         } else if ($this->getRequest()->getMethod() == 'DELETE') {
             $this->deleteAction();
         }
+    }
+    
+    /**
+     * Méthode POST
+     * @param type $data
+     */
+    public function save($data, $isApi = false)
+    {
+        $paysTable = $this->getServiceLocator()->get('pays-table');
+        
+        $country = new \CountryReferential\Model\Pays();
+        $country->exchangeArray($data);
+        
+        $paysTable->saveCountry($country, $isApi);
     }
     
     /**

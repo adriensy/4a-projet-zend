@@ -92,7 +92,7 @@ class PaysTable
         return $this->getPays();
     }
     
-    public function saveCountry(Pays $pays)
+    public function saveCountry(Pays $pays, $isApi = false)
     {
         $data = [
             'id'        => $pays->getId(),
@@ -106,9 +106,12 @@ class PaysTable
         ];
         
         $id = (int)$pays->getId();
+        $code = $pays->getCode();
         
-        if ($id == 0) {
+        if ($id == 0 && !$isApi) {
             $this->tableGateway->insert($data);
+        } else if ($isApi && $this->getPays($code)) {
+            $this->tableGateway->update($data, array('code' => $code));
         } else {
             if ($this->getPaysById($id)) { 
                 $this->tableGateway->update($data, array('id' => $id));

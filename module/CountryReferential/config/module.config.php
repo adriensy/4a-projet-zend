@@ -15,7 +15,7 @@ return array(
             'api_get_delete' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/api/country/[:code]',
+                    'route'    => '/api/country[/:code]',
                     'defaults' => array(
                         '__NAMESPACE__' => 'CountryReferential\Controller',
                         'controller'    => 'Api',
