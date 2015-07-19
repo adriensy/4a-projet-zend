@@ -27,7 +27,7 @@ class PaysTable
      * @return array
      * @throws \Exception
      */
-    public function getPays($code = "", $fieldsString = "")
+    public function getPays($code = "", $fieldsString = "", $returnObject = false)
     {
         $select = new Select();
         $where = null;
@@ -61,7 +61,11 @@ class PaysTable
                     $result[] = $row->toArray();
                 }
             } else if ($rowset->count() > 0) {
-                $result[] = $rowset->current()->toArray();
+                if ($returnObject) {
+                    $result[] = $rowset->current();
+                } else {
+                    $result[] = $rowset->current()->toArray();
+                }
             }
             
             if(empty($result)) {
@@ -79,8 +83,12 @@ class PaysTable
      * 
      * @return type
      */
-     public function getPaysAdmin()
+    public function getPaysAdmin($code = "")
     {
+        if ($code) {
+            return $this->getPays($code, "", true);
+        }
+        
         return $this->getPays();
     }
     

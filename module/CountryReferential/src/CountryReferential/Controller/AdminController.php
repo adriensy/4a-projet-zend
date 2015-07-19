@@ -7,6 +7,7 @@ use Zend\View\Model\ViewModel;
 use Zend\Authentication\AuthenticationService;
 use Zend\Authentication\Adapter\Http;
 use Zend\Authentication\Adapter\Http\FileResolver;
+use CountryReferential\Form\CountryUpdate;
 
 class AdminController extends AbstractActionController
 {
@@ -40,6 +41,28 @@ class AdminController extends AbstractActionController
         }
         
         return $this->redirect()->toRoute('api_admin');
+    }
+    
+    public function countryUpdateAction()
+    {
+        $view = new ViewModel();
+        $form = new CountryUpdate();
+        $code = $this->params('code');
+        
+        if ($code) {
+            $paysTable = $this->getServiceLocator()->get('pays-table');
+            $paysArray = $paysTable->getPaysAdmin($code);
+            
+            $form->bind($paysArray[0]);
+
+            if ($this->request->isPost()) {
+
+            }
+
+            $view->setVariable("form", $form);
+        }
+        
+        return $view;
     }
     
     protected function getAuthService()

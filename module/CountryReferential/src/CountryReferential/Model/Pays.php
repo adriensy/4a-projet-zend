@@ -148,4 +148,9 @@ class Pays
         
         return $array;
     }
+    
+    public function getArrayCopy()
+    {
+        return $this->toArray();
+    }
 }

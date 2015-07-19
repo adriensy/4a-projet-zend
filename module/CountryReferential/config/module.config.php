@@ -60,6 +60,17 @@ return array(
                     ),
                 ),
             ),
+            'api_admin_update' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/admin/api/update/[:code]',
+                    'defaults' => array(
+                        '__NAMESPACE__' => 'CountryReferential\Controller',
+                        'controller'    => 'Admin',
+                        'action'        => 'countryUpdate',
+                    ),
+                ),
+            ),
         ),
     ),
     'service_manager' => array(

@@ -1,0 +1,12 @@
+<?php
+    $form = $this->form;
+    
+    $form->setAttribute('action', $this->url(null, ['controller' => 'Admin', 'action' => 'countryUpdate']));
+?>
+<h2>Identification</h2>
+
+<section class="register">
+    <?php echo $this->form()->render($form); ?>
+</section>
+
+<a href="<?php echo $this->url('api_admin'); ?>"><< Retour à la liste</a>
