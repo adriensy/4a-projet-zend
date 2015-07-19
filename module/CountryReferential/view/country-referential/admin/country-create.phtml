@@ -1,9 +1,9 @@
 <?php
     $form = $this->form;
     
-    $form->setAttribute('action', $this->url('api_admin_update', ['code' => $this->code]));
+    $form->setAttribute('action', $this->url('api_admin_create'));
 ?>
-<h2>Modification d'un pays</h2>
+<h2>Création d'un pays</h2>
 
 <section class="register">
     <?php echo $this->form()->render($form); ?>

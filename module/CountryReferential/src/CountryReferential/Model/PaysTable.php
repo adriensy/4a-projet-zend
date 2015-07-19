@@ -92,6 +92,45 @@ class PaysTable
         return $this->getPays();
     }
     
+    public function saveCountry(Pays $pays)
+    {
+        $data = [
+            'id'        => $pays->getId(),
+            'code'  => $pays->getCode(),
+            'alpha2'  => $pays->getAlpha2(),
+            'alpha3'  => $pays->getAlpha3(),
+            'nom_en_gb'  => $pays->getNomEnGb(),
+            'nom_fr_fr' => $pays->getNomFrFr(),
+            'devise'  => $pays->getDevise(),
+            'taux_tva'  => $pays->getTauxTva(),
+        ];
+        
+        $id = (int)$pays->getId();
+        
+        if ($id == 0) {
+            $this->tableGateway->insert($data);
+        } else {
+            if ($this->getPaysById($id)) { 
+                $this->tableGateway->update($data, array('id' => $id));
+            } else {
+                throw new \Exception('User ID does not exist');
+            }
+        }
+    }
+    
+    public function getPaysById($id)
+    {
+        $rowset = $this->tableGateway->select(array('id'=> (int) $id));
+        
+        $row = $rowset->current();
+        
+        if(!$row) {
+            throw new \Exception("Could not find row $id");
+        }
+        
+        return $row;
+    }
+    
     /**
      * Méthode get : retourne au format XML
      * 

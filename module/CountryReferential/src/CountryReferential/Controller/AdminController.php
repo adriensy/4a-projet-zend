@@ -7,7 +7,7 @@ use Zend\View\Model\ViewModel;
 use Zend\Authentication\AuthenticationService;
 use Zend\Authentication\Adapter\Http;
 use Zend\Authentication\Adapter\Http\FileResolver;
-use CountryReferential\Form\CountryUpdate;
+use CountryReferential\Form\Country;
 
 class AdminController extends AbstractActionController
 {
@@ -43,26 +43,89 @@ class AdminController extends AbstractActionController
         return $this->redirect()->toRoute('api_admin');
     }
     
+    /**
+     * Create country
+     */
+    public function countryCreateAction()
+    {
+        $view = new ViewModel();
+        $form = new Country();
+        
+        if ($this->request->isPost()) {
+            $post = $this->request->getPost();
+
+            $form->setData($post);
+
+            if (false === $form->isValid()) {
+                return $view;
+            }
+
+            $cleanedData = $form->getData();
+
+            $this->saveCountry($cleanedData);
+            
+            return $this->redirect()->toRoute('api_admin');
+        }
+        
+        $view->setVariable("form", $form);
+        
+        return $view;
+    }
+    
+    /**
+     * Update country
+     * @return ViewModel
+     */
     public function countryUpdateAction()
     {
         $view = new ViewModel();
-        $form = new CountryUpdate();
+        $form = new Country();
         $code = $this->params('code');
         
         if ($code) {
             $paysTable = $this->getServiceLocator()->get('pays-table');
             $paysArray = $paysTable->getPaysAdmin($code);
             
+            if (isset($paysArray["error"])) {
+                return $this->redirect()->toRoute('api_admin');
+            }
+            
             $form->bind($paysArray[0]);
-
+            
             if ($this->request->isPost()) {
-
+                $post = $this->request->getPost();
+                
+                $form->setData($post);
+                
+                if (false === $form->isValid()) {
+                    return $view;
+                }
+                
+                $cleanedData = $form->getData();
+                
+                $this->saveCountry($cleanedData);
             }
 
             $view->setVariable("form", $form);
+            $view->setVariable("code", $code);
         }
         
         return $view;
+    }
+    
+    public function saveCountry($data)
+    {
+        if (is_array($data)) {
+            $country = new \CountryReferential\Model\Pays();
+            $country->exchangeArray($data);
+        } else {
+            $country = $data;
+        }
+        
+        $paysTable = $this->getServiceLocator()->get('pays-table');
+        $paysTable->saveCountry($country);
+        
+        return true;
     }
     
     protected function getAuthService()

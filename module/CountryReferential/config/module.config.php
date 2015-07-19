@@ -71,6 +71,17 @@ return array(
                     ),
                 ),
             ),
+            'api_admin_create' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/admin/api/create',
+                    'defaults' => array(
+                        '__NAMESPACE__' => 'CountryReferential\Controller',
+                        'controller'    => 'Admin',
+                        'action'        => 'countryCreate',
+                    ),
+                ),
+            ),
         ),
     ),
     'service_manager' => array(
