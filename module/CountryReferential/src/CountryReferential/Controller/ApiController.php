@@ -14,13 +14,27 @@ class ApiController extends AbstractRestfulController
       ),
    );
     
+    /**
+     * Gère les requêtes entrantes
+     * 
+     * @return type
+     */
     public function indexAction()
     {
-        return new ViewModel();
+        if ($this->getRequest()->getMethod() == 'GET') {
+            $view = $this->getAction();
+            
+            $view->setTemplate("/country-referential/api/get.phtml");
+            
+            return $view;
+        } else if ($this->getRequest()->getMethod() == 'DELETE') {
+            $this->deleteAction();
+        }
     }
     
     /**
      * Méthode GET de l'API
+     * 
      * @return \Zend\View\Model\JsonModel
      */
     public function getAction()
@@ -52,13 +66,19 @@ class ApiController extends AbstractRestfulController
     }
     
     /**
-     * Supprime un ^pays en BDD
+     * Supprime un pays en BDD
      * 
      * @param type $code
      */
-    public function deleteAction($code)
+    public function deleteAction()
     {
+        $code = $this->params('code');
         
+        if ($code) {
+            $paysTable = $this->getServiceLocator()->get('pays-table');
+
+            $paysTable->deleteCountry($code);
+        }
     }
 }
 

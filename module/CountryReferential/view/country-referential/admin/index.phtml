@@ -1,1 +1,25 @@
-Action "index", controller "Admin", module "CountryReferential".
+
+
+
+
+<table>
+    <tr>
+        <th>Nom</th>
+        <th>Actions</th>
+    </tr>
+    
+<?php
+    foreach ($this->vars()->country as $country) {
+?>
+    <tr>
+        <td><?php echo $country['nom_fr_fr']; ?></td>
+        <td>
+            <a href="<?php //echo $this->url(''); ?>">Modifier</a>
+            <a href="<?php echo $this->url('api_admin_delete', ['code' => $country['code']]); ?>">Supprimer</a>
+        </td>
+    </tr>
+<?php
+    }
+?>
+    
+</table>

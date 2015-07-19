@@ -12,14 +12,25 @@ return array(
                     ),
                 ),
             ),
-            'api_get' => array(
-                'type'    => 'Literal',
+            'api_get_delete' => array(
+                'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/api/country',
+                    'route'    => '/api/country/[:code]',
                     'defaults' => array(
                         '__NAMESPACE__' => 'CountryReferential\Controller',
                         'controller'    => 'Api',
-                        'action'        => 'get',
+                        'action'        => 'index',
+                    ),
+                ),
+            ),
+            'api_admin' => array(
+                'type'    => 'Literal',
+                'options' => array(
+                    'route'    => '/admin/api',
+                    'defaults' => array(
+                        '__NAMESPACE__' => 'CountryReferential\Controller',
+                        'controller'    => 'Admin',
+                        'action'        => 'index',
                     ),
                 ),
                 'may_terminate' => true,
@@ -27,13 +38,25 @@ return array(
                     'default' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/[:code]',
+                            'route'    => '/[:controller/[:action]]',
                             'constraints' => array(
-                                'code' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                             ),
                             'defaults' => array(
                             ),
                         ),
+                    ),
+                ),
+            ),
+            'api_admin_delete' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/admin/api/delete/[:code]',
+                    'defaults' => array(
+                        '__NAMESPACE__' => 'CountryReferential\Controller',
+                        'controller'    => 'Admin',
+                        'action'        => 'delete',
                     ),
                 ),
             ),

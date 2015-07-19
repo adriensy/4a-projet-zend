@@ -37,10 +37,7 @@ class PaysTable
             $select->from('pays');
 
             if ($code) {
-                $where = new Where();
-                $where->equalTo('code', $code);
-                $where->OR->equalTo('alpha2', $code);
-                $where->OR->equalTo('alpha3', $code);
+                $where = $this->constructWhereFromCode($code);
 
                 $select->where($where);
 
@@ -78,6 +75,16 @@ class PaysTable
     }
     
     /**
+     * Retourne la liste des pays de la vue d'admin
+     * 
+     * @return type
+     */
+     public function getPaysAdmin()
+    {
+        return $this->getPays();
+    }
+    
+    /**
      * Méthode get : retourne au format XML
      * 
      * @param type $code
@@ -102,5 +109,37 @@ class PaysTable
         }
         
         return $paysXml->asXML();
+    }
+    
+    /**
+     * Supprime un pays en base de données depuis son code, alpha2 ou alpha3
+     * 
+     * @param type $code
+     */
+    public function deleteCountry($code)
+    {
+        $delete = new \Zend\Db\Sql\Delete();
+        $where = $this->constructWhereFromCode($code);
+        
+        $delete->from('pays')->where($where);
+        
+        $this->tableGateway->deleteWith($delete);
+    }
+    
+    /**
+     * Retourne une clause where sur le code fourni en paramètre
+     * 
+     * @param type $code
+     * @return Where
+     */
+    private function constructWhereFromCode($code)
+    {
+        $where = new Where();
+        
+        $where->equalTo('code', $code);
+        $where->OR->equalTo('alpha2', $code);
+        $where->OR->equalTo('alpha3', $code);
+        
+        return $where;
     }
 }
