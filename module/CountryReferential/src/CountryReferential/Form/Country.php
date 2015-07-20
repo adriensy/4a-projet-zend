@@ -9,7 +9,7 @@ use Zend\Form\Element\Submit;
 
 class Country extends Form
 {
-    public function __construct() {
+    public function __construct($isCreate = false) {
         parent::__construct('Country');
         
         $this->setAttribute('method', 'post');
@@ -44,7 +44,14 @@ class Country extends Form
         $tauxTva->setLabel('Taux TVA :');
         
         $submit = new Submit('send');
-        $submit->setValue("Modifier");
+        
+        if($isCreate) {
+            $submit->setValue("Créer");
+        } else {
+            $submit->setValue("Modifier");
+        }
+        
+        
         
         //$validator = new Zend\Validator\EmailAddress();
         

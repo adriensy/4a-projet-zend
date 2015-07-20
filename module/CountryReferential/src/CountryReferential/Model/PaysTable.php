@@ -148,7 +148,7 @@ class PaysTable
         
         foreach($paysListe as $id => $pays) {
             if (is_string($pays)) {
-                $paysXml->addChild("error", $pays);
+                $paysXml->addChild("error", mb_convert_encoding($pays, "UTF-8"));
             } else {
                 $subnode = $paysXml->addChild("country-".($id+1));
                 

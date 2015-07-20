@@ -49,7 +49,7 @@ class AdminController extends AbstractActionController
     public function countryCreateAction()
     {
         $view = new ViewModel();
-        $form = new Country();
+        $form = new Country(true);
         
         if ($this->request->isPost()) {
             $post = $this->request->getPost();
@@ -128,6 +128,7 @@ class AdminController extends AbstractActionController
         return true;
     }
     
+    // FONCTION A VIRER
     protected function getAuthService()
     {
         $config = array(
